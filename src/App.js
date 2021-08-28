@@ -31,10 +31,6 @@ const App = () => {
     setLargeImageURL(largeImageURL );
   };
 
-  // const toggleModal = () => {
-  //   setShowModal(prevState => !prevState)
-  // };
-
   useEffect(() => {
     if (query === '') {
       return;
