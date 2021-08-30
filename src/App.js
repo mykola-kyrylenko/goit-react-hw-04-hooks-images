@@ -13,7 +13,7 @@ import Loader from './components/Loader/Loader';
 const App = () => {
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
-  const [images, setImages] = useState([])
+  const [images, setImages] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [largeImageURL, setLargeImageURL] = useState(null);
@@ -27,7 +27,8 @@ const App = () => {
   };
 
   const onClickImage = largeImageURL => {
-    setShowModal(prevState => !prevState)
+    // console.log(largeImageURL)
+    setShowModal(showModal => !showModal)
     setLargeImageURL(largeImageURL );
   };
 
@@ -42,20 +43,20 @@ const App = () => {
       setLoading( true );
       fetchData
         .data(query, page)
-        .then(({ hits, total }) => {
+        .then(({ total, hits }) => {
           if (total === 0) {
             toast.error(`По запросу ничего не найдено! Введите другой запрос`)
           }
 
-          setImages(prevImage => [...prevImage, ...hits],
-          );
+
+          setImages(hits);
               
           window.scrollTo({
             top: document.documentElement.offsetHeight,
             behavior: 'smooth',
           });                  
         })
-        .then(console.log)
+
         .catch(error => setError( error.message ))
         .finally(setLoading(false));
     };
@@ -63,6 +64,10 @@ const App = () => {
     fetchImages();
 
   }, [page, query]);
+
+    const toggleModal = () => {
+        setShowModal(!showModal)
+    };
 
 
 
@@ -74,9 +79,7 @@ const App = () => {
         <ImageGallery images={images} onClick={onClickImage}/>
         
         {showModal && (
-          <Modal imageURL={largeImageURL} toggleModal={() => {
-            setShowModal(prevState => !prevState);
-          }} />
+          <Modal imageURL={largeImageURL} toggleModal={toggleModal} />
         )}
 
         {images.length > 0 && (
@@ -103,92 +106,3 @@ const App = () => {
 };
 
 export default App;
-
-// export default class App extends Component {
-//  
-//   handleFormSubmit = query => {
-//     this.setState({ query });
-//     // console.log({query})
-//   };
-
-//     componentDidUpdate(prevProps, prevState) {
-//         const { query} = this.state;
-        
-//       if (prevState.query !== query) {
-//             this.fetchImages()
-//       };
-//     };
-    
-//     fetchImages = () => {
-//         this.setState({ loading: true });
-//         fetchData
-//             .data(this.state.query, this.state.page)
-//             .then(({ hits, total }) => {
-//                 if (total === 0) {
-//                     toast.error(`По запросу ничего не найдено! Введите другой запрос`)
-//                 }
-
-//                 this.setState(prevState => ({
-//                   images: [...prevState.images, ...hits],
-//                 }));
-              
-//               window.scrollTo({
-//                 top: document.documentElement.offsetHeight,
-//                 behavior: 'smooth',
-//               });
-              
-//               this.setState(prevState => ({
-//                 page: prevState.page + 1,
-//               }));
-              
-//             })
-//             .then(console.log)
-//             .catch(error => this.setState({ error: error.message }))
-//             .finally(this.setState({ loading: false }));
-//     };
- 
-
-  
-//   onClickImage = largeImageURL => {
-//     this.toggleModal();
-//     this.setState({ largeImageURL: largeImageURL });
-//   };
-
-//     toggleModal = () => {
-//     this.setState(prevState => ({
-//       showModal: !prevState.showModal,
-//     }));
-//   };
-
-//   render() {
-//     return (
-//       <div className={s.App}>
-//         <Searchbar onSubmit={this.handleFormSubmit} />
-
-//         <ImageGallery images={this.state.images} onClick={this.onClickImage}/>
-        
-//         {this.state.showModal && (
-//           <Modal imageURL={this.state.largeImageURL} toggleModal={this.toggleModal} />
-//         )}
-
-//         {this.state.images.length > 0 && (
-//           <Button onClick={this.fetchImages} />
-//         )}
-      
-//         {this.state.loading && <Loader />}
-
-//         <ToastContainer
-//           position="top-right"
-//           autoClose={3000}
-//           hideProgressBar={false}
-//           newestOnTop={false}
-//           closeOnClick
-//           rtl={false}
-//           pauseOnFocusLoss
-//           draggable
-//           pauseOnHover
-//         />
-//       </div>
-//     );
-//   }
-// }

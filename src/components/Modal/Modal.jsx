@@ -3,11 +3,11 @@ import { createPortal } from 'react-dom';
 import { useEffect } from 'react';
 import s from './Modal.module.css';
 
-const modalRoot = document.querySelector('#modal-root');
+const modalRoot = document.querySelector('#root');
 
-const Modal = ({imageURL, toggleModal}) => {
+const Modal = ({imageURL, toggleModal=null}) => {
   useEffect(() => {
-    document.addEventListener('keydown', this.closeModal);
+    document.addEventListener('keydown', closeModal);
     return () => {
       document.removeEventListener('keydown', closeModal);
     };

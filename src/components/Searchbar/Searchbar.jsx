@@ -19,8 +19,8 @@ const Searchbar = ({ onSubmit }) => {
         };;
 
         onSubmit(query);
-        setQuery({ query: '' });
-        console.log(query)
+        // setQuery( query);
+        // console.log(query)
     };
 
     return (
